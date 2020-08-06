@@ -13,7 +13,8 @@ In the findings, it is found that "Tornado" is the greatest consequence for both
 
 # Data Processing  
 
-```{r,echo = TRUE, cache = TRUE, warning = FALSE, message = FALSE}
+
+```r
 if(!dir.exists("./data")){
   dir.create("./data") # creating a directory for storing data.
 }
@@ -26,13 +27,21 @@ noaa <- read.csv("noaa.csv.bz2")
 
 # Analyzing the effect of most harmful events on human health
 
-```{r, echo = TRUE, message = FALSE, warning = FALSE}
+
+```r
 library(tidyverse)
 library(ggplot2)
 x <- data.frame(noaa %>% group_by(EVTYPE) %>% summarise(population_damage = sum(FATALITIES, INJURIES))) # adding fatalities and damage
                                                                                                         # for total population damage.
 
 print(paste("The total number of missing values in x is ", sum(is.na(x)), sep = " "))
+```
+
+```
+## [1] "The total number of missing values in x is  0"
+```
+
+```r
 arranged_x <- x %>% arrange(desc(population_damage)) # decreasing order of damages due to different events. 
 top_10 <- arranged_x[1:10, ] # top 10 most harmful events on human health.
 
@@ -44,13 +53,23 @@ g <- g + geom_bar(aes(fill = EVTYPE), stat = "identity") +
 print(g)
 ```
 
+![](analysis_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
 # Analyzing the effect of most harmful events on economy
 
-```{r, echo = TRUE, message = FALSE, warning = FALSE}
+
+```r
 y <- data.frame(noaa %>% group_by(EVTYPE) %>% summarise(economic_loss = sum(PROPDMG, CROPDMG))) # adding PROPDMG and CROPDMG
                                                                                                 # for total economic loss.
 
 print(paste("The total number of missing values in y is ", sum(is.na(y)), sep = " "))
+```
+
+```
+## [1] "The total number of missing values in y is  0"
+```
+
+```r
 arranged_y <- y %>% arrange(desc(economic_loss)) # decreasing order of damages due to different events. 
 top_10 <- arranged_y[1:10, ]  # top 10 most harmful events on economy.
 
@@ -61,6 +80,8 @@ g <- g + geom_bar(aes(fill = EVTYPE), stat = "identity") +
   theme(axis.text.x = element_blank(), plot.title = element_text(hjust = 0.5))
 print(g)
 ```
+
+![](analysis_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
 # Results  
 1. It can be seen from the above figure 1 that Events like TORNADO, EXCESSIVE HEAT, TSTM WIND, FLOOD, and LIGHTNING are the greatest consequences for the economic loss in the region.
